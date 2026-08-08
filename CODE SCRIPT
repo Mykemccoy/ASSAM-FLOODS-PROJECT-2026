@@ -1,0 +1,248 @@
+// ============================================================================
+// SPARK 3.0 | FLOOD DAMAGE & ACCESSIBILITY MAPPING
+// Upper Assam Floods 2026
+// Study Area: Jorhat + Sivasagar + Charaideo
+// Version 2.0 - Improved Flood Extraction
+// ============================================================================
+
+
+// ============================================================================
+// 1. LOAD STUDY AREA
+// ============================================================================
+
+var districts = ee.FeatureCollection("users/Michaellanrey/Upper_Assam");
+// Users/Michaellanrey/Upper_Assam is the directory for the regions shape file
+
+Map.centerObject(districts, 9);
+
+Map.addLayer(
+    districts,
+    {color: 'black'},
+    'Upper Assam Boundary',
+    false
+);
+
+
+// ============================================================================
+// 2. SPECKLE FILTER FUNCTION
+// ============================================================================
+
+function despeckle(image){
+  return image.focal_median({
+    radius:30,
+    units:'meters'
+  });
+}
+
+
+// ============================================================================
+// 3. LOAD PRE-FLOOD SENTINEL-1
+// ============================================================================
+
+var preFlood = ee.ImageCollection("COPERNICUS/S1_GRD")
+    .filterBounds(districts)
+    .filterDate('2026-05-01','2026-05-20')
+    .filter(ee.Filter.eq('instrumentMode','IW'))
+    .filter(ee.Filter.eq('orbitProperties_pass','DESCENDING'))
+    .filter(ee.Filter.listContains('transmitterReceiverPolarisation','VV'))
+    .select('VV')
+    .median()
+    .clip(districts);
+
+preFlood = despeckle(preFlood);
+
+
+// ============================================================================
+// 4. LOAD POST-FLOOD SENTINEL-1
+// ============================================================================
+
+var postFlood = ee.ImageCollection("COPERNICUS/S1_GRD")
+    .filterBounds(districts)
+    .filterDate('2026-06-15','2026-07-15')
+    .filter(ee.Filter.eq('instrumentMode','IW'))
+    .filter(ee.Filter.eq('orbitProperties_pass','DESCENDING'))
+    .filter(ee.Filter.listContains('transmitterReceiverPolarisation','VV'))
+    .select('VV')
+    .median()
+    .clip(districts);
+
+postFlood = despeckle(postFlood);
+
+
+// ============================================================================
+// 5. FLOOD DETECTION
+// ============================================================================
+
+// Backscatter reduction after flooding
+
+var difference = preFlood.subtract(postFlood);
+
+// Thresholding
+
+var floodMask = difference.gt(3)
+    .and(postFlood.lt(-15));
+
+
+// ============================================================================
+// 6. REMOVE SMALL NOISY PATCHES
+// ============================================================================
+
+var floodClean = floodMask
+    .selfMask()
+    .connectedPixelCount(100, true)
+    .gte(8)
+    .selfMask();
+
+
+// ============================================================================
+// 7. FLOOD AREA CALCULATION
+// ============================================================================
+
+var floodArea = floodClean.multiply(ee.Image.pixelArea());
+
+var stats = floodArea.reduceRegion({
+
+    reducer: ee.Reducer.sum(),
+
+    geometry: districts.geometry(),
+
+    scale:10,
+
+    maxPixels:1e13
+
+});
+
+print(
+'Flood Area (km²)',
+ee.Number(stats.get('VV')).divide(1e6)
+);
+
+
+// ============================================================================
+// 8. SIMPLE DISTRICT ASSESSMENT (Temporary)
+// (Will later be replaced with actual settlement analysis)
+// ============================================================================
+
+var assessmentPoints = districts.map(function(feature){
+
+  var floodStats = floodClean.reduceRegion({
+
+      reducer: ee.Reducer.mean(),
+
+      geometry: feature.geometry(),
+
+      scale:10,
+
+      maxPixels:1e13
+
+  });
+
+  var exposure = ee.Number(
+      ee.Algorithms.If(
+          floodStats.get('VV'),
+          floodStats.get('VV'),
+          0
+      )
+  );
+
+  return feature.centroid().set({
+
+      district: feature.get('shapeName'),
+
+      flood_exposure_percent: exposure.multiply(100),
+
+      priority_score: exposure.multiply(100)
+
+  });
+
+});
+
+
+// ============================================================================
+// 9. VISUALIZATION
+// ============================================================================
+
+Map.addLayer(
+    preFlood,
+    {
+      min:-25,
+      max:0
+    },
+    'Pre-Flood SAR',
+    false
+);
+
+Map.addLayer(
+    postFlood,
+    {
+      min:-25,
+      max:0
+    },
+    'Post-Flood SAR',
+    false
+);
+
+Map.addLayer(
+    floodClean,
+    {
+      palette:['0000FF']
+    },
+    'Flood Extent 2026'
+);
+
+Map.addLayer(
+    assessmentPoints,
+    {
+      color:'red'
+    },
+    'Assessment Points'
+);
+
+
+// ============================================================================
+// 10. EXPORT FLOOD MAP
+// ============================================================================
+
+Export.image.toDrive({
+
+    image:floodClean,
+
+    description:'Upper_Assam_Flood_Extent_2026',
+
+    folder:'SPARK_2026',
+
+    region:districts.geometry(),
+
+    scale:10,
+
+    maxPixels:1e13,
+
+    fileFormat:'GeoTIFF'
+
+});
+
+
+// ============================================================================
+// 11. EXPORT SUMMARY TABLE
+// ============================================================================
+
+Export.table.toDrive({
+
+    collection:assessmentPoints,
+
+    description:'Upper_Assam_Priority_Summary',
+
+    folder:'SPARK_2026',
+
+    fileFormat:'CSV'
+
+});
+
+
+// ============================================================================
+// 12. PRINT OUTPUTS
+// ============================================================================
+
+print('Flood Assessment Summary', assessmentPoints);
+
+print('Study Area', districts);
