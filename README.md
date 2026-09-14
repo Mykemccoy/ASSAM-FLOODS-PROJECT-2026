@@ -25,5 +25,5 @@ graph TD;
     E --> H[Unflooded Educational Shelter Screening];
 
 ---
-## Study Area Map
-![image alt](https://github.com/Mykemccoy/ASSAM-FLOODS-PROJECT-2026/blob/a79b17e56e0c55259af0cd951b9a3672721ebe44/study_area.png)
+```markdown
+![image alt](https://github.com/Mykemccoy/ASSAM-FLOODS-PROJECT-2026/raw/a79b17e56e0c55259af0cd951b9a3672721ebe44/study_area.png)
