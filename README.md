@@ -23,7 +23,3 @@ graph TD;
     E --> F[Submerged Road Link Identification];
     E --> G[2km Proximity Buffering for Isolated Villages & Healthcare];
     E --> H[Unflooded Educational Shelter Screening];
-
----
-```markdown
-![image alt](https://github.com/Mykemccoy/ASSAM-FLOODS-PROJECT-2026/raw/a79b17e56e0c55259af0cd951b9a3672721ebe44/study_area.png)
