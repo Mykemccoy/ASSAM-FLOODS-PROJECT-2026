@@ -28,7 +28,8 @@ graph TD;
     E --> G[2km Proximity Buffering for Isolated Villages & Healthcare];
     E --> H[Unflooded Educational Shelter Screening];
 ```
-### Flood Extent & Road Network Disruption Map
+
+## Flood Extent & Road Network Disruption Map
 <p align="center">
-  <img src="flood_Extent_Road_Network_Disruption.png" alt="Flood_Extent_and_Road_Network_Disruption - Upper Assam Region" width="850"/>
+  <img src="Flood_Extent_Road_Network_Disruption.png" alt="Flood Extent and Road Network Disruption Map" width="850"/>
 </p>
