@@ -10,7 +10,7 @@ This study addresses critical road network disruptions and rural community isola
 Using Sentinel-1 Synthetic Aperture Radar (SAR) imagery in Google Earth Engine alongside OpenStreetMap infrastructure vectors in QGIS, the spatial analysis pipeline evaluates flood impacts through persistent monsoon cloud cover. The framework delineates surface flood extents, identifies submerged road links, and pinpoints isolated villages and cut-off healthcare facilities. Furthermore, unflooded educational facilities are identified outside risk zones to directly guide disaster response routing, emergency medical aid, and shelter staging.
 
 ---
-
+## STUDY AREA MAP
 <p align="center">
   <img src="study_area.png" alt="Study Area Map - Upper Assam Region" width="850"/>
 </p>
@@ -28,7 +28,7 @@ graph TD;
     E --> G[2km Proximity Buffering for Isolated Villages & Healthcare];
     E --> H[Unflooded Educational Shelter Screening];
 ```
-### Other Maps
+### Flood Extent & Road Network Disruption Map
 <p align="center">
-  <img src="study_area.png" alt="Study Area Map - Upper Assam Region" width="850"/>
+  <img src="flood_Extent_Road_Network_Disruption.png" alt="Flood_Extent_and_Road_Network_Disruption - Upper Assam Region" width="850"/>
 </p>
