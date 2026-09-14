@@ -25,3 +25,8 @@ graph TD;
     E --> H[Unflooded Educational Shelter Screening];
 
 
+
+<p align="center">
+  <img src="maps/study_area.png" alt="Assam Region Study Area Map" width="850"/>
+</p>
+
