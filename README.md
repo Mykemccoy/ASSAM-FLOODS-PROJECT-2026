@@ -33,3 +33,9 @@ graph TD;
 <p align="center">
   <img src="Flood_Extent_Road_Network_Disruption.png" alt="Flood Extent and Road Network Disruption Map" width="850"/>
 </p>
+
+
+## Critical Infrastructure Risk & Shelter Availability Map
+<p align="center">
+  <img src="image.png" alt="Critical Infrastructure Risk and Shelter Availability Map" width="850"/>
+</p>
