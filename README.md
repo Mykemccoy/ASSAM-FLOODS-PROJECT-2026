@@ -24,4 +24,4 @@ graph TD;
     E --> G[2km Proximity Buffering for Isolated Villages & Healthcare];
     E --> H[Unflooded Educational Shelter Screening];
 
-![image alt](https://github.com/Mykemccoy/ASSAM-FLOODS-PROJECT-2026/blob/d5fcc1de47a3b2bfd0034861586725e61b80f628/maps/Flood_Extent_and_Road_Network.png)
+![image alt](https://github.com/Mykemccoy/ASSAM-FLOODS-PROJECT-2026/blob/a79b17e56e0c55259af0cd951b9a3672721ebe44/study_area.png)
