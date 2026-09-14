@@ -11,6 +11,10 @@ Using Sentinel-1 Synthetic Aperture Radar (SAR) imagery in Google Earth Engine a
 
 ---
 
+<p align="center">
+  <img src="study_area.png" alt="Study Area Map - Upper Assam Region" width="850"/>
+</p>
+
 ## Methodology
 The methodology combines radar-derived flood change detection with vector network analysis:
 
@@ -23,3 +27,8 @@ graph TD;
     E --> F[Submerged Road Link Identification];
     E --> G[2km Proximity Buffering for Isolated Villages & Healthcare];
     E --> H[Unflooded Educational Shelter Screening];
+```
+### Other Maps
+<p align="center">
+  <img src="study_area.png" alt="Study Area Map - Upper Assam Region" width="850"/>
+</p>
